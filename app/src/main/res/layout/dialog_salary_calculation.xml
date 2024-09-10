@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Spinner để chọn nhân viên từ Firebase -->
+    <Spinner
+        android:id="@+id/spinnerEmployee"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Chọn nhân viên"
+        android:minHeight="48dp"/>
+
+    <EditText
+        android:id="@+id/edtBasicSalary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Lương cơ bản"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/edtAllowance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phụ cấp"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/edtTax"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Thuế"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/edtInsurance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Bảo hiểm"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp" />
+
+    <Button
+        android:id="@+id/btnCalculate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tính lương"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/txtResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lương thực nhận: "
+        android:paddingTop="20dp"
+        android:textSize="18sp"
+        android:textColor="@android:color/black" />
+
+</LinearLayout>
