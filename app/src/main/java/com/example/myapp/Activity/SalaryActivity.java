@@ -47,14 +47,14 @@ public class SalaryActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        salaryAdapter = new SalaryAdapter(salaryList);
+        salaryAdapter = new SalaryAdapter(salaryList, this);
         recyclerView.setAdapter(salaryAdapter);
 
-        // Load employees from Firebase
+        // danh sach nhan vien
         loadEmployeesFromFirebase();
 
-        // Load salaries from Firebase
-        loadSalariesFromFirebase(); // Sửa tên phương thức từ LoadSalariesFromFirebase thành loadSalariesFromFirebase
+        // danh sach luong
+        loadSalariesFromFirebase();
 
         Button btnAddEmployeeSlr = findViewById(R.id.btnAddEmployeeSlr);
         btnAddEmployeeSlr.setOnClickListener(v -> openCalculateSalaryDialog());
@@ -113,7 +113,8 @@ public class SalaryActivity extends AppCompatActivity {
             // Add new item to RecyclerView
             String id = selectedEmployee.getId();
             String name = selectedEmployee.getName();
-            SalaryItem newItem = new SalaryItem(id, name, formattedSalary);
+            SalaryItem newItem = new SalaryItem(id, name, formattedSalary, basicSalary, allowance, tax, insurance);
+
             salaryList.add(newItem);
             salaryAdapter.notifyDataSetChanged();
 
