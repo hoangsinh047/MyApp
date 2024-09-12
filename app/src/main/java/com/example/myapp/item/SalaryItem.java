@@ -22,7 +22,6 @@ public class SalaryItem {
         this.insurance = insurance;
     }
 
-    // Getter và Setter cho id
     public String getId() {
         return id;
     }
@@ -31,7 +30,6 @@ public class SalaryItem {
         this.id = id;
     }
 
-    // Getter và Setter cho name
     public String getName() {
         return name;
     }

@@ -61,6 +61,43 @@ public class EmployeesActivity extends AppCompatActivity {
         loadEmployeesFromFirebase();
     }
 
+    private void addNewEmployee(String name, String email, String phone, String position) {
+        DatabaseReference counterRef = FirebaseDatabase.getInstance().getReference("counters/employeeID");
+        counterRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Long currentID = snapshot.getValue(Long.class);
+                if (currentID == null) {
+                    currentID = 0L; // Khởi tạo giá trị mặc định nếu chưa có
+                }
+                long newID = currentID + 1;
+                String newIdString = String.valueOf(newID);
+
+                // Tạo nhân viên mới với ID mới
+                Employee newEmployee = new Employee(newIdString, name, email, phone, position);
+
+                // Lưu nhân viên vào Firebase
+                DatabaseReference employeeRef = FirebaseDatabase.getInstance().getReference("employees");
+                employeeRef.child(newIdString).setValue(newEmployee)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(EmployeesActivity.this, "Nhân viên đã được thêm", Toast.LENGTH_SHORT).show();
+                                employeeList.add(newEmployee); // Thêm nhân viên vào danh sách
+                                adapter.notifyDataSetChanged(); // Cập nhật danh sách
+                                counterRef.setValue(newID); // Cập nhật số thứ tự mới
+                            } else {
+                                Toast.makeText(EmployeesActivity.this, "Thêm nhân viên thất bại", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(EmployeesActivity.this, "Lỗi khi lấy số thứ tự", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void showAddEmployeeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -68,7 +105,6 @@ public class EmployeesActivity extends AppCompatActivity {
         builder.setView(dialogView);
 
         // Khởi tạo thông tin trong dialog
-        EditText etID = dialogView.findViewById(R.id.etID);
         EditText etEmployeeName = dialogView.findViewById(R.id.etEmployeeName);
         EditText etEmployeeEmail = dialogView.findViewById(R.id.etEmployeeEmail);
         EditText etEmployeePhone = dialogView.findViewById(R.id.etEmployeePhone);
@@ -81,28 +117,18 @@ public class EmployeesActivity extends AppCompatActivity {
         btnSave.setOnClickListener(v -> {
             hideKeyboard(); // Ẩn bàn phím khi nhấn nút lưu
 
-            String id = etID.getText().toString();
             String name = etEmployeeName.getText().toString();
             String email = etEmployeeEmail.getText().toString();
             String phone = etEmployeePhone.getText().toString();
             String position = etEmployeePosition.getText().toString();
 
-            // Thêm nhân viên mới
-            Employee newEmployee = new Employee(id, name, email, phone, position);
-
-            // Lưu vào Firebase
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference ref = database.getReference("employees");
-
-            ref.child(id).setValue(newEmployee).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(this, "Nhân viên đã được thêm mới", Toast.LENGTH_SHORT).show();
-                    loadEmployeesFromFirebase(); // Làm mới danh sách nhân viên
-                } else {
-                    Toast.makeText(this, "Thêm nhân viên thất bại", Toast.LENGTH_SHORT).show();
-                }
+            // Thêm nhân viên mới với ID tự động
+            if (!name.isEmpty() && !position.isEmpty() && !phone.isEmpty()) {
+                addNewEmployee(name, email, phone, position);
                 dialog.dismiss(); // Đóng dialog
-            });
+            } else {
+                Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            }
         });
 
         dialog.show();
@@ -139,5 +165,4 @@ public class EmployeesActivity extends AppCompatActivity {
             }
         });
     }
-
 }

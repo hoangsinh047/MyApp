@@ -78,7 +78,6 @@ public class EmployeeAdapter extends ArrayAdapter<Employee> {
         View dialogView = inflater.inflate(R.layout.dialog_add_edit_employee, null);
         builder.setView(dialogView);
 
-        EditText etID = dialogView.findViewById(R.id.etID);
         EditText etEmployeeName = dialogView.findViewById(R.id.etEmployeeName);
         EditText etEmployeeEmail = dialogView.findViewById(R.id.etEmployeeEmail);
         EditText etEmployeePhone = dialogView.findViewById(R.id.etEmployeePhone);
@@ -86,7 +85,6 @@ public class EmployeeAdapter extends ArrayAdapter<Employee> {
 
         Button btnSave = dialogView.findViewById(R.id.btnSave);
 
-        etID.setText(employee.getId());
         etEmployeeName.setText(employee.getName());
         etEmployeeEmail.setText(employee.getEmail());
         etEmployeePhone.setText(employee.getPhone()); // Sử dụng String cho số điện thoại
